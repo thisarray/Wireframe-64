@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>stardust</title>
+  <script src="../../jsgame0.js"></script>
+  <style type="text/css" media="screen">
+body {
+  background-color: white;
+  color: black;
+}
+.hidden {
+  display: none;
+}
+#original {
+  margin-left: 1em;
+}
+  </style>
+</head>
+
+<body>
+<section id="imageLoader" class="hidden">
+  <img class="hidden" src="images/ast1_1.png" alt="ast1_1" data-name="ast1_1">
+  <img class="hidden" src="images/ast1_10.png" alt="ast1_10" data-name="ast1_10">
+  <img class="hidden" src="images/ast1_11.png" alt="ast1_11" data-name="ast1_11">
+  <img class="hidden" src="images/ast1_12.png" alt="ast1_12" data-name="ast1_12">
+  <img class="hidden" src="images/ast1_2.png" alt="ast1_2" data-name="ast1_2">
+  <img class="hidden" src="images/ast1_3.png" alt="ast1_3" data-name="ast1_3">
+  <img class="hidden" src="images/ast1_4.png" alt="ast1_4" data-name="ast1_4">
+  <img class="hidden" src="images/ast1_5.png" alt="ast1_5" data-name="ast1_5">
+  <img class="hidden" src="images/ast1_6.png" alt="ast1_6" data-name="ast1_6">
+  <img class="hidden" src="images/ast1_7.png" alt="ast1_7" data-name="ast1_7">
+  <img class="hidden" src="images/ast1_8.png" alt="ast1_8" data-name="ast1_8">
+  <img class="hidden" src="images/ast1_9.png" alt="ast1_9" data-name="ast1_9">
+  <img class="hidden" src="images/ast2_1.png" alt="ast2_1" data-name="ast2_1">
+  <img class="hidden" src="images/ast2_10.png" alt="ast2_10" data-name="ast2_10">
+  <img class="hidden" src="images/ast2_11.png" alt="ast2_11" data-name="ast2_11">
+  <img class="hidden" src="images/ast2_12.png" alt="ast2_12" data-name="ast2_12">
+  <img class="hidden" src="images/ast2_2.png" alt="ast2_2" data-name="ast2_2">
+  <img class="hidden" src="images/ast2_3.png" alt="ast2_3" data-name="ast2_3">
+  <img class="hidden" src="images/ast2_4.png" alt="ast2_4" data-name="ast2_4">
+  <img class="hidden" src="images/ast2_5.png" alt="ast2_5" data-name="ast2_5">
+  <img class="hidden" src="images/ast2_6.png" alt="ast2_6" data-name="ast2_6">
+  <img class="hidden" src="images/ast2_7.png" alt="ast2_7" data-name="ast2_7">
+  <img class="hidden" src="images/ast2_8.png" alt="ast2_8" data-name="ast2_8">
+  <img class="hidden" src="images/ast2_9.png" alt="ast2_9" data-name="ast2_9">
+  <img class="hidden" src="images/ast3_1.png" alt="ast3_1" data-name="ast3_1">
+  <img class="hidden" src="images/ast3_10.png" alt="ast3_10" data-name="ast3_10">
+  <img class="hidden" src="images/ast3_11.png" alt="ast3_11" data-name="ast3_11">
+  <img class="hidden" src="images/ast3_12.png" alt="ast3_12" data-name="ast3_12">
+  <img class="hidden" src="images/ast3_2.png" alt="ast3_2" data-name="ast3_2">
+  <img class="hidden" src="images/ast3_3.png" alt="ast3_3" data-name="ast3_3">
+  <img class="hidden" src="images/ast3_4.png" alt="ast3_4" data-name="ast3_4">
+  <img class="hidden" src="images/ast3_5.png" alt="ast3_5" data-name="ast3_5">
+  <img class="hidden" src="images/ast3_6.png" alt="ast3_6" data-name="ast3_6">
+  <img class="hidden" src="images/ast3_7.png" alt="ast3_7" data-name="ast3_7">
+  <img class="hidden" src="images/ast3_8.png" alt="ast3_8" data-name="ast3_8">
+  <img class="hidden" src="images/ast3_9.png" alt="ast3_9" data-name="ast3_9">
+  <img class="hidden" src="images/background.png" alt="background" data-name="background">
+  <img class="hidden" src="images/bullet.png" alt="bullet" data-name="bullet">
+  <img class="hidden" src="images/ship.png" alt="ship" data-name="ship">
+</section>
+
+<main>
+<h1>stardust</h1>
+
+<canvas id="screen">
+The game screen appears here if your browser supports the Canvas API.
+</canvas>
+<section id="controls">
+  <button type="button" id="reset">Reset</button>
+  <button type="button" id="pause">Pause</button>
+</section>
+
+<h2>Attribution</h2>
+
+<p><a href="https://wireframe.raspberrypi.com/issues/64">Code an homage to Super Stardust, pages 64-65, by Mark Vanstone</a>.</p>
+
+<p>Licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/legalcode">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported</a>.</p>
+
+<p><a href="https://www.raspberrypi.com/news/code-an-homage-to-super-stardust-wireframe-64/">Blog post of Source Code</a>.</p>
+
+<h2>Original Python code</h2>
+
+<pre id="original"><code>
+# Pygame Stardust
+import pgzrun
+import math
+
+ship = Actor(&#x27;ship&#x27;, center=(400, 300))
+count = gameover = 0
+asteroids = []
+bullets = []
+for a in range(0, 4):
+    asteroids.append(Actor(&#x27;ast1_&#x27;+str((a+1)*3), center=(100+(a*200),100+((a%2)*400))))
+    asteroids[a].angle = (80*a) + 20
+    asteroids[a].status = 0
+
+def draw():
+    screen.blit(&quot;background&quot;, (0, 0))
+    for b in range(0, len(bullets)):
+        bullets[b].draw()
+    drawAsteroids()
+    if gameover != 1 or (gameover == 1 and count%2 == 0): ship.draw()
+    if gameover == 1 : screen.draw.text(&quot;YOU CLEARED ALL THE ASTEROIDS&quot;, center = (400, 300), owidth=0.5, ocolor=(255,255,0), color=(255,0,0) , fontsize=50)
+
+def update():
+    global count
+    count += 1
+    if gameover == 0:
+        if keyboard.left : ship.angle += 2
+        if keyboard.right : ship.angle -= 2
+        updateBullets()
+        updateAsteroids()
+
+def on_key_down(key):
+    if gameover == 0:
+        if key.name == &quot;SPACE&quot;: makeBullet()
+
+def drawAsteroids():
+    for a in range(0, len(asteroids)):
+        if asteroids[a].status == 0: asteroids[a].draw()
+
+def updateAsteroids():
+    global gameover
+    asteroidsLeft = False
+    for a in range(0, len(asteroids)):
+        if asteroids[a].status == 0 : asteroidsLeft = True
+        i = int(asteroids[a].image[5:])
+        if count%5 == 0: i += 1
+        if i &gt; 12: i = 1
+        imagebase = asteroids[a].image[0:5]
+        angle = asteroids[a].angle
+        asteroids[a].x += math.sin(math.radians(angle))
+        asteroids[a].y += math.cos(math.radians(angle))
+        if asteroids[a].x &gt; 850 : asteroids[a].x -= 850
+        if asteroids[a].x &lt; -50 : asteroids[a].x += 850
+        if asteroids[a].y &gt; 650 : asteroids[a].y -= 650
+        if asteroids[a].y &lt; -50 : asteroids[a].y += 650
+        asteroids[a].image = imagebase + str(i)
+        asteroids[a].angle = angle
+    if asteroidsLeft == False : gameover = 1
+
+def updateBullets():
+    global bullets
+    bulletsTemp = []
+    tb = 0
+    for b in range(0, len(bullets)):
+        if isOnScreen(bullets[b]) and not hitAsteroid(bullets[b]) :
+            bulletsTemp.append(Actor(&#x27;bullet&#x27;))
+            bulletsTemp[tb].x = bullets[b].x + 5 * math.sin(math.radians(bullets[b].angle))
+            bulletsTemp[tb].y = bullets[b].y + 5 * math.cos(math.radians(bullets[b].angle))
+            bulletsTemp[tb].angle = bullets[b].angle
+            tb += 1
+    bullets = bulletsTemp
+
+def hitAsteroid(b):
+    for a in range(0, len(asteroids)):
+        if asteroids[a].collidepoint(b.pos) and asteroids[a].status == 0:
+            breakAsteroid(a,b.angle)
+            return True
+    return False
+
+def breakAsteroid(a,angle):
+    acount = len(asteroids)
+    anum = int(asteroids[a].image[3])
+    if anum &lt; 3:
+        anum += 1
+        asteroids.append(Actor(&#x27;ast&#x27;+str(anum)+&#x27;_1&#x27;, center=(asteroids[a].pos)))
+        asteroids[acount].angle = (angle + 90) % 360
+        asteroids[acount].status = 0
+        acount += 1
+        asteroids.append(Actor(&#x27;ast&#x27;+str(anum)+&#x27;_6&#x27;, center=(asteroids[a].pos)))
+        asteroids[acount].angle = (angle - 90) % 360
+        asteroids[acount].status = 0
+    asteroids[a].status = 1
+
+def makeBullet():
+    a = len(bullets)
+    bullets.append(Actor(&#x27;bullet&#x27;, center=(400,300)))
+    bullets[a].angle = (ship.angle + 180) % 360
+
+def isOnScreen(b):
+    if b.x &gt; 0 and b.x &lt; 800 and b.y &gt;0 and b.y &lt; 600 :
+        return True
+    else :
+        return False
+
+pgzrun.go()
+</code></pre>
+</main>
+
+<script>
+// Pygame Stardust
+
+var ship, count, gameover, asteroids, bullets;
+
+function reset() {
+  ship = new Actor('ship');
+  ship.center = [400, 300];
+  count = 0;
+  gameover = 0;
+  asteroids = [];
+  bullets = [];
+  for (let a = 0; a < 4; a++) {
+    let asteroid = new Actor('ast1_' + ((a + 1) * 3));
+    asteroid.center = [100 + (a * 200), 100 + ((a % 2) * 400)];
+    asteroid.angle = (80 * a) + 20;
+    asteroid.status = 0;
+    asteroids.push(asteroid);
+  }
+}
+
+function draw() {
+  screen.blit("background", [0, 0]);
+  for (let b of bullets) {
+    b.draw();
+  }
+  drawAsteroids();
+  if ((gameover !== 1) || ((gameover === 1) && ((count % 2) === 0))) {
+    ship.draw();
+  }
+  if (gameover === 1) {
+    screen.draw.text("YOU CLEARED ALL THE ASTEROIDS", {
+      center: [400, 300],
+      owidth: 0.5,
+      ocolor: [255, 255, 0],
+      color: [255, 0, 0],
+      fontsize: 50
+    });
+  }
+}
+
+function update() {
+  count += 1;
+  if (gameover === 0) {
+    if (keyboard[keys.LEFT]) {
+      ship.angle += 2;
+    }
+    if (keyboard[keys.RIGHT]) {
+      ship.angle -= 2;
+    }
+    updateBullets();
+    updateAsteroids();
+  }
+}
+
+function on_key_down(key) {
+  if (gameover === 0) {
+    if (key === keys.SPACE) {
+      makeBullet();
+    }
+  }
+}
+
+function drawAsteroids() {
+  for (let a of asteroids) {
+    if (a.status === 0) {
+      a.draw();
+    }
+  }
+}
+
+function updateAsteroids() {
+  let asteroidsLeft = false,
+      i, imagebase, angle;
+  for (let a of asteroids) {
+    if (a.status === 0) {
+      asteroidsLeft = true;
+    }
+    i = parseInt(a.name.substring(5), 10);
+    if ((count % 5) === 0) {
+      i += 1;
+    }
+    if (i > 12) {
+      i = 1;
+    }
+    imagebase = a.name.substring(0, 5);
+    angle = a.angle;
+    a.posx += Math.sin(angle * Math.PI / 180);
+    a.posy += Math.cos(angle * Math.PI / 180);
+    if (a.posx > 850) {
+      a.posx -= 850;
+    }
+    if (a.posx < -50) {
+      a.posx += 850;
+    }
+    if (a.posy > 650) {
+      a.posy -= 650;
+    }
+    if (a.posy < -50) {
+      a.posy += 650;
+    }
+    a.name = imagebase + i;
+    a.angle = angle;
+  }
+  if (!asteroidsLeft) {
+    gameover = 1;
+  }
+}
+
+function updateBullets() {
+  let bulletsTemp = [],
+      temp;
+  for (let b of bullets) {
+    if (isOnScreen(b) && (!hitAsteroid(b))) {
+      temp = new Actor('bullet');
+      temp.posx = b.posx + (5 * Math.sin(b.angle * Math.PI / 180));
+      temp.posy = b.posy + (5 * Math.cos(b.angle * Math.PI / 180));
+      temp.angle = b.angle;
+      bulletsTemp.push(temp);
+    }
+  }
+  bullets = bulletsTemp;
+}
+
+function hitAsteroid(b) {
+  for (let a of asteroids) {
+    if (a.collidepoint(b.pos) && (a.status === 0)) {
+      breakAsteroid(a, b.angle);
+      return true;
+    }
+  }
+  return false;
+}
+
+function breakAsteroid(asteroid, angle) {
+  let anum = parseInt(asteroid.name.charAt(3), 10),
+      fragment;
+  if (anum < 3) {
+    anum += 1;
+    fragment = new Actor('ast' + anum + '_1');
+    fragment.center = asteroid.pos;
+    fragment.angle = (angle + 90) % 360;
+    fragment.status = 0;
+    asteroids.push(fragment);
+    fragment = new Actor('ast' + anum + '_6');
+    fragment.center = asteroid.pos;
+    fragment.angle = (angle + 270) % 360;
+    fragment.status = 0;
+    asteroids.push(fragment);
+  }
+  asteroid.status = 1;
+}
+
+function makeBullet() {
+  let bullet = new Actor('bullet');
+  bullet.center = [400, 300];
+  bullet.angle = (ship.angle + 180) % 360;
+  bullets.push(bullet);
+}
+
+function isOnScreen(b) {
+  if ((b.posx > 0) && (b.posx < 800) && (b.posy > 0) && (b.posy < 600)) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+window.addEventListener('load', (event) => {
+  images.LOAD('#imageLoader img');
+  reset();
+  screen.set_mode('#screen', '#reset', '#pause');
+});
+</script>
+</body>
+
+</html>
